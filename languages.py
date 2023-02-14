@@ -15,7 +15,7 @@ def to_list(s):
         return sp
 
 data = pd.read_csv('processed_data/data_song_annotation_merged_20170815.csv',encoding='utf-8')
-print len(data)
+print(len(data))
 
 data['lang'] = 'NULL'
 data['is_null'] = True
@@ -29,5 +29,5 @@ for index,row in data.iterrows():
             data.loc[index,'is_null'] = False
         except:
             pass
-print len(data[data['lang']=='NULL'])
+print(len(data[data['lang']=='NULL']))
 data.to_csv('processed_data/data_song_annotation_merged_20170815_withlangs.csv',index=False,encoding='utf-8')

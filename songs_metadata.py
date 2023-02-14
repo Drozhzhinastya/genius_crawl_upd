@@ -1,5 +1,7 @@
 import json,pandas as pd
-from functions import metadata,available_songsmetadata
+from functions import metadata
+import time
+
 song_ids = pd.read_csv('songs.tsv',delimiter='\t',header=None)
 song_ids = set(song_ids[song_ids.columns[2]])
 
@@ -11,16 +13,21 @@ song_ids = set(song_ids[song_ids.columns[2]])
 # song_ids = song_ids.difference(songs)
 
 nfiles = 0
-outfile = open('songs_metadata_all.json',mode='w') if nfiles==0 else open('songs_metadata'+str(nfiles+1)+'.json',mode='w')
+outfile = open('songs_metadata_all.json',mode='wb') if nfiles==0 else open('songs_metadata'+str(nfiles+1)+'.json',mode='wb')
 g = open('songs_metadata_all_log_file.tsv',mode='w') if nfiles==0 else open('songs_metadata_log_file'+str(nfiles+1)+'.tsv',mode='w')
 
-# print 'Found a total of',len(songs),'songs already there'
-print 'Getting data for',len(song_ids),'songs'
+# print('Found a total of',len(songs),'songs already there')
+print('Getting data for',len(song_ids),'songs')
 for song_id in song_ids:
 	try:
 		data_out = metadata(song_id)
 		outfile.write((json.dumps(data_out)+'\n').encode('utf-8'))
+		time.sleep(1)
 	except:
 		g.write(song_id+'\n')
+		data_out = metadata(song_id)
+		outfile.write((json.dumps(data_out)+'\n').encode('utf-8')) #ето я вставила
+		time.sleep(1)
+
 outfile.close()
 g.close()
